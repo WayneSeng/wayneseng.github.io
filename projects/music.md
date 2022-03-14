@@ -14,8 +14,16 @@ A floppy drive has a stepper motor that moves the read/write head back and forth
 \
 ![Floppy Drive Pinout](/images/floppy_pinout.png){:.centered}
 \
-We notice 2 pins of interest called Step and Dir. These 2 pins allow direct control of the speed and direction of the read/write head. Unfortunately, before we can do anything, the drives must be enabled by pulling the Drive select A or B pin to ground. If the green LED on the front of the drive is on, the drive has been enabled. Now if we connect the step pin to ground, the stepper head moves a bit. By connecting the dir pin to high and ground, we can vary the direction of the read/write head. To power the drives, connect a suitable 5v power supply that can deliver at least 500mA to the +5v and GND on the floppy power connector. A computer ATX power supply with a floppy connector can also be used.
+We notice 2 pins of interest called Step and Dir. These 2 pins allow direct control of the speed and direction of the read/write head. Unfortunately, before we can do anything, the drives must be enabled by pulling the Drive select A or B pin to ground. If the green LED on the front of the drive is on, the drive has been enabled. Now if we connect the step pin to ground, the stepper head moves a bit. By connecting the dir pin to high and ground, we can vary the direction of the read/write head. To power the drives, connect a suitable 5v power supply that can deliver at least 500mA to the +5v and GND on the floppy power connector. A computer ATX power supply with a floppy connector can also be used. A microcontroller interprets MIDI data from a computer and drives the floppy drives accordingly.
 \
-Here is a demonstration with 2 floppy drives playing Carra Mia Addio from Portal 2:
 \
-[![Thumbnail](https://i.ytimg.com/vi/mtVKBj7uICo/hqdefault.jpg)](https://www.youtube.com/watch?v=mtVKBj7uICo&ab_channel=WayneSeng "Carra Mia Addio on Floppy Drives")
+Here is a demonstration of 2 floppy drives playing Carra Mia Addio from Portal 2:
+\
+[![Thumbnail](https://i.ytimg.com/vi/mtVKBj7uICo/maxresdefault.jpg)](https://www.youtube.com/watch?v=mtVKBj7uICo&ab_channel=WayneSeng "Carra Mia Addio on Floppy Drives")
+\
+Driving stepper motors follows the exact same concept, although an external driver is used. I chose the A4988. The A4988 also has a Step and Dir pin just like the floppy drive.
+\
+\
+Here is a demonstration of a single stepper motor playing Yakety Sax:
+\
+[![Thumbnail](https://i.ytimg.com/vi/IOzDmH98lQA/maxresdefault.jpg)](https://www.youtube.com/watch?v=IOzDmH98lQA&ab_channel=WayneSeng "Yakety Sax on Stepper Motor")
