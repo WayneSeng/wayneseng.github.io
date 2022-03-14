@@ -2,12 +2,9 @@ navbar_entries:
   - title: about
     url: about
 
-  - title: blog
-    url: blog
-
 project_entries:
   - title: Music with Computer Hardware
-    url: about
+    url: /projects/music
     desc: Making music with stepper motors, floppy drives, and hard drives.
 
 old_project_entries:
