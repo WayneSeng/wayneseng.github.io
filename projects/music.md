@@ -3,6 +3,12 @@ layout: post
 title: Music with Computer Hardware
 ---
 
+<style>
+        figure {
+            text-align: center;
+        }
+</style>
+
 \
 Thanks to [Paweł Zadrożniak](https://www.youtube.com/channel/UCximsD7EJ38jzCNgfP_YTmA), [Device Orchestra](https://www.youtube.com/c/DeviceOrchestra), [MrSolidSnake745](https://www.youtube.com/c/MrSolidSnake745), [ArcAttack!](https://www.youtube.com/user/arcattackmusic), [Franzoli Electronics](https://www.youtube.com/c/FranzoliElectronics), and many other smaller creators for inspiration and ideas for this project. This blog may not even have existed if these awesome people didn't exist. Please check out their content and subscribe.
 \
@@ -21,9 +27,29 @@ Here is a demonstration of 2 floppy drives playing Carra Mia Addio from Portal 2
 \
 [![Thumbnail](https://i.ytimg.com/vi/mtVKBj7uICo/maxresdefault.jpg)](https://www.youtube.com/watch?v=mtVKBj7uICo&ab_channel=WayneSeng "Carra Mia Addio on Floppy Drives")
 \
-Driving stepper motors follows the exact same concept, although an external driver is used. I chose the A4988. The A4988 also has a Step and Dir pin just like the floppy drive.
+Driving stepper motors follows the exact same concept, although an external driver is used. I chose the A4988. The A4988 also has a Step and Dir pin just like the floppy drive. A stepper motor is different from a standard dc motor because it allows so much more control over the exact position of the motor. This allows it to be used in industrial applications such as robot arms or 3d printers as these motors can be controlled with extreme precision.
+
+<figure>
+    <img src="/images/stepper_motor.bmp" alt="stepper" width="400"/>
+    <figcaption>Bipolar Stepper Motor</figcaption>
+ </figure>
 \
+The A4988 is a complete microstepping motor driver with built-in translator for easy operation with minimal control lines. Carriers with these driver chips can be picked up quite cheaply on Aliexpress. If we take a look at a typical connection diagram, the only two connections to the microcontroller are the DIR and STEP pins. However, it is important to add a decoupling capacitor of approximately 47uF between Vmot and GND. The reset and sleep pins must be connected together to enable the driver. Additionally, the enable pin can be connected to the microcontroller to disable the driver when needed. The A4988 is a microstepping driver, so we can operate in full, half, quarter, eighth, or sixteenth step resolution. From my experience, running the driver at half step resolution for music allows for higher notes to be achieved, as well as less vibration.
+
+<figure>
+    <img src="/images/a4988.bmp" alt="stepper" width="400"/>
+    <figcaption>A4988</figcaption>
+ </figure>
+
+ <figure>
+    <img src="/images/A4988_connection.bmp" alt="A4988_schematic" width="600"/>
+    <figcaption>Typical Connection Diagram</figcaption>
+ </figure>
 \
 Here is a demonstration of a single stepper motor playing Yakety Sax:
 \
 [![Thumbnail](https://i.ytimg.com/vi/IOzDmH98lQA/maxresdefault.jpg)](https://www.youtube.com/watch?v=IOzDmH98lQA&ab_channel=WayneSeng "Yakety Sax on Stepper Motor")
+
+## Project Update April 15, 2022
+
+A couple weeks ago, I received the custom PCBs for my ESP32 stepper and floppy synth. I also scavanged a free printer someone had thrown out. Similar to what the floppotron does with flat bed scanners, I will interface with the stepper motor inside the printer scan bed using the L298N H bridge driver. Im glad this printer has been saved from the landfill and will have a new purpose.
