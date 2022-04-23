@@ -9,6 +9,11 @@ title: Music with Computer Hardware
         }
 </style>
 
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+  type="text/javascript">
+</script>
+
 \
 Thanks to [Paweł Zadrożniak](https://www.youtube.com/channel/UCximsD7EJ38jzCNgfP_YTmA), [Device Orchestra](https://www.youtube.com/c/DeviceOrchestra), [MrSolidSnake745](https://www.youtube.com/c/MrSolidSnake745), [ArcAttack!](https://www.youtube.com/user/arcattackmusic), [Franzoli Electronics](https://www.youtube.com/c/FranzoliElectronics), and many other smaller creators for inspiration and ideas for this project. This blog may not even have existed if these awesome people didn't exist. Please check out their content and subscribe.
 \
@@ -45,7 +50,29 @@ The A4988 is a complete microstepping motor driver with built-in translator for 
     <img src="/images/A4988_connection.bmp" alt="A4988_schematic" width="600"/>
     <figcaption>Typical Connection Diagram</figcaption>
  </figure>
-\
+
+Operation of the A4988 is very simple, by pulsing the step pin at the frequency of a note, the motor will spin at that frequency. Here is some sample code and explanation:
+
+```
+digitalWrite(stepPin, HIGH);
+digitalWrite(stepPin, LOW);
+delayMicroseconds(2273); //2273us equivalent to concert A(440Hz)
+```
+
+To calulate the period, we need to some very simple math:
+
+We know the period(T) is related to frequency(F) by:
+
+$$T = \dfrac{1}{F}$$
+
+$$0.002273s = \dfrac{1}{440Hz}$$
+
+Converting from seconds to microseconds to use in the `delayMicroseconds()` function:
+
+$$2273us = 0.002273s \cdot 10^6$$
+
+Therefore, we must pulse the step pin every 2273us in order to produce a 440Hz note. Unfortunately, this is an example of a blocking delay, which means we can only run one motor at once. In order to step multiple motors, we need to implement a non blocking delay.
+
 Here is a demonstration of a single stepper motor playing Yakety Sax:
 \
 [![Thumbnail](https://i.ytimg.com/vi/IOzDmH98lQA/maxresdefault.jpg)](https://www.youtube.com/watch?v=IOzDmH98lQA&ab_channel=WayneSeng "Yakety Sax on Stepper Motor")
@@ -53,3 +80,12 @@ Here is a demonstration of a single stepper motor playing Yakety Sax:
 ## Project Update April 15, 2022
 
 A couple weeks ago, I received the custom PCBs for my ESP32 stepper and floppy synth. I also scavanged a free printer someone had thrown out. Similar to what the floppotron does with flat bed scanners, I will interface with the stepper motor inside the printer scan bed using the L298N H bridge driver. Im glad this printer has been saved from the landfill and will have a new purpose.
+
+<figure>
+    <img src="/images/l298n.jpg" alt="L298N" width="400"/>
+    <figcaption>L298N Module</figcaption>
+ </figure>
+
+The L298N is designed to drive two DC motors with full direction and speed control. However, with some modification to the code, we can control stepper motors with the L298N. It is important that the stepper motor coil resistance is not too low(below 50 ohms) as this will cause the driver to overheat. If you choose to operate a stepper motor with resistances below 50 ohms, it is recommended to disable the driver as soon as the motor stops. Preferably, using a dedicated stepper driver(A4988, DRV8825) will be much more suitable. 
+
+To drive bipolar stepper motors with the L298N, place jumpers on the ENA and ENB pins. Next, identify the coil pairs in the stepper motor. Using a multimeter set into resistance mode, measure the resistance between any random two wires out of the four. If you get a very high reading (>1KOhm), then swap one of the leads with another and measure again. Do this until you identity the two coil pairs with resistance around 50-100ohms. Connect the coil pairs to the OUTA and OUTB terminals. 
