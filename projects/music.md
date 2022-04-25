@@ -51,12 +51,15 @@ The A4988 is a complete microstepping motor driver with built-in translator for 
     <figcaption>Typical Connection Diagram</figcaption>
  </figure>
 
-Operation of the A4988 is very simple, by pulsing the step pin at the frequency of a note, the motor will spin at that frequency. Here is some sample code and explanation:
+Operation of the A4988 is very simple, by pulsing the step pin at the frequency of a note, the motor will spin at that frequency. Here is some sample code and explanation(should work on majority of microcontrollers):
 
 ```
-digitalWrite(stepPin, HIGH);
-digitalWrite(stepPin, LOW);
-delayMicroseconds(2273); //2273us equivalent to concert A(440Hz)
+void loop() {
+    digitalWrite(stepPin, HIGH);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(2273); //2273us equivalent to concert A(440Hz)
+}
+
 ```
 
 To calulate the period, we need to some very simple math:
@@ -72,6 +75,16 @@ Converting from seconds to microseconds to use in the `delayMicroseconds()` func
 $$2273us = 0.002273s \cdot 10^6$$
 
 Therefore, we must pulse the step pin every 2273us in order to produce a 440Hz note. Unfortunately, this is an example of a blocking delay, which means we can only run one motor at once. In order to step multiple motors, we need to implement a non blocking delay.
+
+```
+void loop() {
+    if(micros() - previousTime >= period) {
+        previousTime = micros();
+        digitalWrite(stepPin, HIGH);
+        digitalWrite(stepPin, LOW);
+    }
+}
+```
 
 Here is a demonstration of a single stepper motor playing Yakety Sax:
 \
@@ -89,3 +102,23 @@ A couple weeks ago, I received the custom PCBs for my ESP32 stepper and floppy s
 The L298N is designed to drive two DC motors with full direction and speed control. However, with some modification to the code, we can control stepper motors with the L298N. It is important that the stepper motor coil resistance is not too low(below 50 ohms) as this will cause the driver to overheat. If you choose to operate a stepper motor with resistances below 50 ohms, it is recommended to disable the driver as soon as the motor stops. Preferably, using a dedicated stepper driver(A4988, DRV8825) will be much more suitable. 
 
 To drive bipolar stepper motors with the L298N, place jumpers on the ENA and ENB pins. Next, identify the coil pairs in the stepper motor. Using a multimeter set into resistance mode, measure the resistance between any random two wires out of the four. If you get a very high reading (>1KOhm), then swap one of the leads with another and measure again. Do this until you identity the two coil pairs with resistance around 50-100ohms. Connect the coil pairs to the OUTA and OUTB terminals. 
+
+The programming is a bit more complicated because we need to pulse the IN pins in a specific order to step the motor. The ordering goes like this: IN1-IN3-IN2-IN4. To step the motor the other direction, we simply reverse the ordering. Here is some sample code:
+
+```
+void loop() {
+    digitalWrite(IN1, HIGH);
+    delayMicroseconds(2273); //Concert A
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN3, HIGH);
+    delayMicroseconds(2273);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN2, HIGH);
+    delayMicroseconds(2273);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN4, HIGH);
+    delayMicroseconds(2273);
+    digitalWrite(IN4, LOW);
+    delayMicroseconds(2273);
+}
+```
