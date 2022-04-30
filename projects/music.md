@@ -38,7 +38,7 @@ Driving stepper motors follows the exact same concept, although an external driv
     <img src="/images/stepper_motor.bmp" alt="stepper" width="400"/>
     <figcaption>Bipolar Stepper Motor</figcaption>
  </figure>
-\
+
 The A4988 is a complete microstepping motor driver with built-in translator for easy operation with minimal control lines. Carriers with these driver chips can be picked up quite cheaply on Aliexpress. If we take a look at a typical connection diagram, the only two connections to the microcontroller are the DIR and STEP pins. However, it is important to add a decoupling capacitor of approximately 47uF between Vmot and GND. The reset and sleep pins must be connected together to enable the driver. Additionally, the enable pin can be connected to the microcontroller to disable the driver when needed. The A4988 is a microstepping driver, so we can operate in full, half, quarter, eighth, or sixteenth step resolution. From my experience, running the driver at half step resolution for music allows for higher notes to be achieved, as well as less vibration.
 
 <figure>
@@ -92,7 +92,7 @@ Here is a demonstration of a single stepper motor playing Yakety Sax:
 
 ## Project Update April 15, 2022
 
-A couple weeks ago, I received the custom PCBs for my ESP32 stepper and floppy synth. I also scavanged a free printer someone had thrown out. Similar to what the floppotron does with flat bed scanners, I will interface with the stepper motor inside the printer scan bed using the L298N H bridge driver. Im glad this printer has been saved from the landfill and will have a new purpose.
+A couple weeks ago, I received the custom PCBs for my ESP32 stepper and floppy synth. I also scavanged a free printer someone had thrown out. Similar to what the floppotron does with flat bed scanners. I will interface with the stepper motor inside the printer scan bed using the L298N H bridge driver. Im glad this printer has been saved from the landfill and will have a new purpose.
 
 <figure>
     <img src="/images/l298n.jpg" alt="L298N" width="400"/>
@@ -103,7 +103,7 @@ The L298N is designed to drive two DC motors with full direction and speed contr
 
 To drive bipolar stepper motors with the L298N, place jumpers on the ENA and ENB pins. Next, identify the coil pairs in the stepper motor. Using a multimeter set into resistance mode, measure the resistance between any random two wires out of the four. If you get a very high reading (>1KOhm), then swap one of the leads with another and measure again. Do this until you identity the two coil pairs with resistance around 50-100ohms. Connect the coil pairs to the OUTA and OUTB terminals. 
 
-The programming is a bit more complicated because we need to pulse the IN pins in a specific order to step the motor. The ordering goes like this: IN1-IN3-IN2-IN4. To step the motor the other direction, we simply reverse the ordering. Here is some sample code:
+The programming is a bit more complicated because we need to pulse the IN pins in a specific order to step the motor. The forward ordering goes like this: IN1-IN3-IN2-IN4. To step the motor the other direction, we simply reverse the ordering. Here is some sample code:
 
 ```
 void loop() {
