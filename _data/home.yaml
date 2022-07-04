@@ -6,6 +6,9 @@ project_entries:
   - title: Music with Computer Hardware
     url: /projects/music
     desc: Making music with stepper motors, floppy drives, and hard drives.
+  - title: Software Defined Radio
+    url: /projects/radio
+    desc: Observing the radio spectrum
 
 old_project_entries:
 

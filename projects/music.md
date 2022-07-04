@@ -4,9 +4,9 @@ title: Music with Computer Hardware
 ---
 
 <style>
-        figure {
-            text-align: center;
-        }
+    figure {
+        text-align: center;
+    }
 </style>
 
 <script
